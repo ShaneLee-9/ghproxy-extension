@@ -207,13 +207,13 @@
     <div class="content" id="privacy-content">
       <div class="section">
         <div class="section-title">欢迎使用</div>
-        <p>GitHub Accelerator 是一款智能 GitHub 下载加速器，通过智能代理节点选择，为您提供快速的 GitHub 资源下载体验。</p>
+        <p>GitHub Accelerator 会按您保存的固定代理地址，为受支持的 GitHub 下载链接生成代理地址。</p>
         <p>在使用本扩展之前，请仔细阅读以下隐私政策。点击「同意」即表示您理解并接受本政策的所有内容。</p>
       </div>
 
       <div class="section">
         <div class="section-title">数据收集说明</div>
-        <p>本扩展<strong>不会收集、存储或传输</strong>任何个人信息、浏览历史、凭证或敏感数据。不使用任何 Cookie 或第三方跟踪技术。本扩展仅收集匿名聚合统计数据（详见下方「匿名统计功能」）。</p>
+        <p>本扩展不读取完整浏览历史、凭证或敏感信息，也不使用 Cookie 或第三方跟踪技术。扩展会在本地最多保存 50 条已触发的代理操作记录，其中包含对应的 GitHub URL；这些记录不会上传。扩展另会在您同意后上报匿名汇总计数（详见下方说明）。</p>
 
         <p>扩展仅在本地浏览器存储中保存以下数据：</p>
         <table class="data-table">
@@ -226,19 +226,19 @@
           </thead>
           <tbody>
             <tr>
-              <td>最优代理节点缓存</td>
+              <td>代理地址</td>
               <td>本地存储</td>
-              <td>缓存最优代理节点，2小时过期，避免重复测速</td>
+              <td>保存您在扩展弹窗中设置的 proxyUrl</td>
             </tr>
             <tr>
-              <td>代理节点列表</td>
+              <td>最近的代理操作</td>
               <td>本地存储</td>
-              <td>缓存可用代理节点列表及延迟结果</td>
+              <td>保留最多 50 条操作记录，包含对应的 GitHub URL；不会随匿名统计上报</td>
             </tr>
             <tr>
-              <td>始终加速开关</td>
+              <td>隐私同意状态与统计计数</td>
               <td>本地存储</td>
-              <td>用户偏好设置，自动跳转不显示选择页面</td>
+              <td>记住隐私选择并累计匿名汇总计数</td>
             </tr>
           </tbody>
         </table>
@@ -298,10 +298,8 @@
       <div class="section">
         <div class="section-title">网络请求说明</div>
         <div class="notice-card warning">
-          <p><strong>关于地理位置检测的提示：</strong></p>
-          <p>为判断您是否位于中国大陆（决定是否需要加速），扩展会通过 Cloudflare 边缘节点的 <code>/cdn-cgi/trace</code> 端点获取您的 IP 所属地区。该端点直接由 Cloudflare 网络应答，不经过任何第三方服务器。</p>
-          <p>检测顺序：优先请求自有域名 <strong>gh.dpik.top</strong>（您的 IP 不会发送给任何第三方）；如不可用则依次回退到 visa.cn、cloudflare.com（此时您的 IP 会暴露给 Cloudflare/Visa）；最后回退到第三方服务（api.ipapi.is / api.ip.sb，此时您的 IP 会暴露给上述第三方）。</p>
-          <p>我们本身<strong>不会存储、记录或上报</strong>您的 IP 地址，也无法控制第三方如何处理该信息。如果您无法接受本隐私政策，建议直接卸载本扩展。</p>
+          <p><strong>关于代理访问：</strong></p>
+          <p>扩展不会替您下载文件，也不会向代理服务发起测速请求。设置代理地址后，受支持的 GitHub 下载导航会直接重定向到该代理；代理服务会收到请求及正常网络连接所需的信息。请只使用您信任的代理服务，并查看其隐私政策。</p>
         </div>
         <p>扩展会向以下地址发起网络请求：</p>
         <table class="data-table">
@@ -314,29 +312,14 @@
           </thead>
           <tbody>
             <tr>
-              <td>hubp.tbedu.top</td>
+              <td>hubp.tbedu.top/announcements.json</td>
               <td>无</td>
-              <td>获取可用代理节点列表</td>
+              <td>在扩展选项页获取公告内容</td>
             </tr>
             <tr>
-              <td>gh.dpik.top/cdn-cgi/trace（自有域名）</td>
-              <td>IP 地址（仅用于判断所属地区，不存储、不记录）</td>
-              <td>检测地理位置（优先，数据不经过第三方）</td>
-            </tr>
-            <tr>
-              <td>www.visa.cn / www.cloudflare.com 的 /cdn-cgi/trace</td>
-              <td>IP 地址（仅用于判断所属地区，不存储、不记录）</td>
-              <td>检测地理位置（兜底 1，由 Cloudflare/Visa 应答）</td>
-            </tr>
-            <tr>
-              <td>api.ipapi.is / api.ip.sb</td>
-              <td>IP 地址（仅用于判断所属地区，不存储、不记录）</td>
-              <td>检测地理位置（兜底 2，仅当前两者不可用时）</td>
-            </tr>
-            <tr>
-              <td>代理节点（如 gh.dpik.top）</td>
-              <td>无</td>
-              <td>测速，下载测试资源</td>
+              <td>用户配置的代理地址</td>
+              <td>用户选择访问的 GitHub 资源 URL</td>
+              <td>重定向受支持的 GitHub 下载链接</td>
             </tr>
             <tr>
               <td>addon-analytics.hubp.org</td>
@@ -367,7 +350,7 @@
     </div>
 
     <div class="footer">
-      <p>智能域名转换 + 节点加速 Powered By <a href="https://www.hubp.org" style="color: #155DFC; text-decoration: none;"
+      <p>固定代理地址 + GitHub 下载路由 Powered By <a href="https://www.hubp.org" style="color: #155DFC; text-decoration: none;"
           target="_blank">hubp.org</a></p>
       <div class="btn-group">
         <button class="btn btn-accept" id="btn-accept">同意</button>

@@ -22,7 +22,7 @@ const STORAGE_KEYS = {
 };
 
 const BATCH_THRESHOLD = 5; // 累积 5 次提交一次
-const REPORT_INTERVAL = 5 * 60 * 1000; // 或每 5 分钟提交一次（与缓存检查同步）
+const REPORT_INTERVAL = 5 * 60 * 1000; // 每 5 分钟检查是否有待上报的匿名统计
 
 /**
  * 检测浏览器类型

@@ -1,105 +1,39 @@
 # Privacy Policy
 
-**Last updated: June 6, 2026**
+GitHub Accelerator lets you configure one fixed HTTP or HTTPS proxy URL. The extension stores that URL locally with `storage.local`.
 
-GitHub Accelerator is a browser extension that accelerates GitHub resource downloads through intelligent proxy node selection, with full compatibility for download managers like IDM.
+The extension does not fetch a proxy list, test proxy latency, detect your location, or download GitHub files itself. When a proxy URL is configured, supported GitHub download navigations are redirected to a URL built from your proxy base and the transformed GitHub URL. The proxy service receives the request and the information normally sent by your browser. Review the proxy provider’s privacy policy and use a service you trust.
 
-## Data Collection
+## Local data
 
-GitHub Accelerator **does not collect, store, or transmit** any personal information, browsing history, credentials, or sensitive data. No analytics, cookies, or tracking technologies are used.
+| Data | Storage | Purpose |
+| --- | --- | --- |
+| `proxyUrl` | `storage.local` | The fixed proxy address you entered |
+| `gh_accelerator_usage_log` | `storage.local` | A local history of recent proxy actions |
+| Privacy consent and aggregate counters | `storage.local` | Remember consent and, when consented, report aggregate extension counts |
 
-The extension only stores the following data locally via Browser Storage API:
+The extension does not sync these values between devices.
 
-| Data                       | Storage         | Purpose                                                                      |
-| -------------------------- | --------------- | ---------------------------------------------------------------------------- |
-| Best proxy node cache      | `storage.local` | Cached optimal proxy node with 2-hour TTL to avoid repeated speed tests      |
-| Proxy node list            | `storage.local` | Cached list of available proxy nodes with latency results                    |
-| Always accelerate toggle   | `storage.local` | User preference to automatically redirect without showing the intercept page |
-| Anonymous usage statistics | `storage.local` | Aggregate counters for acceleration jumps and install counts                 |
+## Optional aggregate statistics
 
-## Data Usage & Storage
+After you accept the privacy page, the extension maintains aggregate counts of installs/updates and proxy redirects. It may send those counts, browser type, extension version, and timestamp to the analytics service below. It does not send the GitHub URL, file name, or proxy URL in this report. The local action history is not uploaded.
 
-All data is stored locally in the user's browser and is never sent to any external server except as explicitly described in the Permissions & Network section below.
+## Permissions and network requests
 
-- **Local storage**: All cached data and user preferences are stored locally only and are automatically cleared upon extension uninstall.
-- **No sync storage**: This extension does not use `storage.sync`, so no data is synchronized across devices or linked to the user's Google account.
-- **No credentials**: The extension does not require, store, or handle any authentication tokens or credentials.
+| Permission or destination | Purpose |
+| --- | --- |
+| `storage` | Save the proxy URL, consent, and local counters |
+| `contextMenus` | Offer copy/open proxy-link actions from the right-click menu |
+| `scripting` | Show a small in-page result message for context-menu actions |
+| `webNavigation` | Detect supported GitHub download navigation |
+| GitHub domains | Recognize and intercept supported GitHub download links |
+| `hubp.tbedu.top` | Fetch announcements shown on the extension options page |
+| `addon-analytics.hubp.org` | Submit optional aggregate usage counts |
+| `addon-analytics-hubp.tbedu.top` | Fallback endpoint for aggregate usage counts |
+| Your configured proxy host | Receive redirected requests for supported GitHub download links |
 
-## Anonymous Statistics
+The extension does not require host permissions for your proxy provider; the browser performs the navigation.
 
-This extension collects **anonymous, aggregate-only** usage statistics to help us understand how the extension is being used. The following data is tracked:
+## Changes
 
-| Statistic               | Description                                                   |
-| ----------------------- | ------------------------------------------------------------- |
-| Acceleration jump count | Total number of times the acceleration redirect was triggered |
-| Install / update count  | Number of times the extension was installed or updated        |
-
-**What we do NOT collect:**
-
-- Personal information (name, email, IP address, etc.)
-- Browsing history or visited URLs
-- Downloaded file names or content
-- Browser bookmarks, passwords, or any sensitive data
-- Any identifier that could be linked back to an individual user
-
-**How the data is used:**
-The anonymous aggregate statistics are used solely to understand extension usage patterns and for public-facing metrics (e.g., "over X accelerations delivered"). Data may be submitted to our server for aggregation, but no personally identifiable information is ever transmitted.
-
-## Data Sharing
-
-GitHub Accelerator **does not** share any user data with third parties. The extension has no servers, databases, or backend infrastructure. All data processing occurs entirely within the user's browser.
-
-No personal information is sold, rented, or disclosed to any external party.
-
-## Permissions & Network
-
-The permissions declared in the extension manifest are the minimum required to provide its functionality:
-
-| Permission                                 | Reason                                                           |
-| ------------------------------------------ | ---------------------------------------------------------------- |
-| `storage`                                  | Save settings and cache proxy node data locally                  |
-| `contextMenus`                             | Add right-click menu items for copying/opening accelerated links |
-| `scripting`                                | Execute scripts to display in-page notifications                 |
-| `webNavigation`                            | Detect navigation to GitHub download URLs before they load       |
-| `https://github.com/*`                     | Intercept GitHub download links (Releases, Archive, Raw, Blob)   |
-| `https://codeload.github.com/*`            | Intercept GitHub code download links                             |
-| `https://raw.githubusercontent.com/*`      | Intercept GitHub raw file links                                  |
-| `https://gist.githubusercontent.com/*`     | Intercept GitHub Gist file links                                 |
-| `https://hubp.tbedu.top/*`                 | Fetch the proxy node list and extension announcements from the API |
-| `https://www.hubp.org/*`                    | Share local node test results and local usage counters with the site (read-only, in-page) |
-| `https://hubp.org/*`                        | Same as above (non-www host)                                     |
-| `https://addon-analytics.hubp.org/*`       | Submit anonymous usage statistics to the aggregation backend     |
-| `https://addon-analytics-hubp.tbedu.top/*` | Submit anonymous usage statistics to the fallback backend        |
-| `https://gh.dpik.top/*`                    | Geographic detection via Cloudflare trace endpoint (own domain)  |
-| `https://www.visa.cn/*`                    | Fallback geographic detection via Cloudflare trace endpoint      |
-| `https://www.cloudflare.com/*`             | Fallback geographic detection via Cloudflare trace endpoint      |
-| `https://api.ipapi.is/*`                   | Last-resort fallback geographic detection                        |
-| `https://api.ip.sb/*`                      | Last-resort fallback geographic detection                        |
-
-Network requests made by the extension:
-
-| Destination                                            | Data Sent                                                                                                 | Purpose                                                |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `https://hubp.tbedu.top/nodes.json`                    | None (GET request with Origin header)                                                                     | Fetch available proxy node list                        |
-| `https://hubp.tbedu.top/announcements.json`            | None (GET request with a cache-busting timestamp)                                                          | Fetch extension announcements shown in the popup       |
-| `https://addon-analytics.hubp.org/stats/collect`       | Anonymous aggregate count only (e.g., `{ jumps: 1, installs: 0, browser: "chromium", version: "1.0.7" }`) | Submit anonymous usage statistics for aggregation      |
-| `https://addon-analytics-hubp.tbedu.top/stats/collect` | Anonymous aggregate count only (same payload as above)                                                    | Fallback endpoint used when the primary is unreachable |
-| `https://gh.dpik.top/cdn-cgi/trace`        | IP address (used only to determine country, not stored)          | Detect user geographic location (own domain, no third party) |
-| `https://www.visa.cn/cdn-cgi/trace`        | IP address (used only to determine country, not stored)          | Fallback geographic detection (answered by Cloudflare/Visa)   |
-| `https://www.cloudflare.com/cdn-cgi/trace` | IP address (used only to determine country, not stored)          | Fallback geographic detection (answered by Cloudflare)        |
-| `https://api.ipapi.is/`                    | IP address (used only to determine country, not stored)          | Last-resort geographic detection (third party)                |
-| `https://api.ip.sb/geoip`                  | IP address (used only to determine country, not stored)          | Last-resort geographic detection (third party)                |
-| Proxy node URLs (e.g. `gh.dpik.top`)       | None                                                                                                      | Speed test proxy nodes by downloading a test resource  |
-| `https://raw.githubusercontent.com/*`                  | None                                                                                                      | Verify proxy node integrity via hash comparison        |
-
-
-### hubp.org Site Bridge
-
-On hubp.org pages, the extension shares its **local** node speed-test results and local usage counters with the website through in-page messages (`window.postMessage`) so the site can reuse a recent test and show your local contribution. This data stays in the browser: the extension does not send it to any server, and the page cannot read other extension storage or write to it. Counter display follows your local privacy consent setting and disappears when you close the site or uninstall the extension.
-No personal data, browsing history, or user identifiers are included in any network request. Geographic detection is used solely to determine whether the user's region requires proxy acceleration (e.g., GFW-restricted areas) and is not stored or transmitted.
-
-## Open Source & Contact
-
-This extension is fully open source. You can verify this privacy policy by reviewing the source code or report issues at:
-
-https://github.com/hubporg/ghproxy-extension
+The extension code is open source. You can inspect the current implementation in this repository.

@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "GitHub Accelerator: GitHub 文件加速",
-    "version": "1.2.0",
-    "description": "智能 GitHub 下载加速器 - 拦截页面模式",
+    "version": "2.0.0",
+    "description": "设置固定代理地址，加速 GitHub 资源下载",
     "permissions": [
         "storage",
         "contextMenus",
@@ -16,12 +16,7 @@
         "*://gist.githubusercontent.com/*",
         "https://hubp.tbedu.top/*",
         "https://addon-analytics.hubp.org/*",
-        "https://addon-analytics-hubp.tbedu.top/*",
-        "https://gh.dpik.top/*",
-        "https://www.visa.cn/*",
-        "https://www.cloudflare.com/*",
-        "https://api.ipapi.is/*",
-        "https://api.ip.sb/*"
+        "https://addon-analytics-hubp.tbedu.top/*"
     ],
     "background": {
         "service_worker": "src/background/background.js",
@@ -55,17 +50,6 @@
             ],
             "run_at": "document_start",
             "all_frames": false
-        },
-        {
-            "matches": [
-                "https://www.hubp.org/*",
-                "https://hubp.org/*"
-            ],
-            "js": [
-                "src/content/site-bridge.js"
-            ],
-            "run_at": "document_idle",
-            "all_frames": false
         }
     ],
     "action": {
@@ -79,15 +63,12 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "src/pages/intercept.html",
-                "src/pages/intercept.js",
                 "src/lib/browser-polyfill.js",
-                "src/lib/icons.js",
-                "src/pages/privacy.html",
-                "src/pages/privacy.js",
+                "src/shared/announcement.js",
                 "src/pages/stats.html",
                 "src/pages/stats-page.js",
-                "src/shared/announcement.js"
+                "src/pages/privacy.html",
+                "src/pages/privacy.js"
             ],
             "matches": [
                 "<all_urls>"

@@ -1,372 +1,179 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub 加速设置</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      color-scheme: light;
+      --ink: #18231f;
+      --muted: #65736d;
+      --paper: #f4f7f5;
+      --white: #fff;
+      --line: #dce5df;
+      --green: #176b4b;
+      --green-dark: #10543a;
+      --orange: #e79a44;
+      --error: #a33a32;
     }
 
+    * { box-sizing: border-box; }
     body {
-      width: 380px;
-      min-height: 400px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: #ffffff;
-      color: #333;
+      width: 360px;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, "Segoe UI", "Microsoft YaHei UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
-
-    .header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid #eaeaea;
-    }
-
-    .title {
-      font-size: 28px;
+    .popup { padding: 22px 22px 18px; }
+    .masthead { display: flex; align-items: center; gap: 11px; }
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px 11px 11px 3px;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 18px;
       font-weight: 700;
-      text-align: center;
-      margin-bottom: 8px;
     }
-
-    .title .normal {
-      color: #24292e;
+    .brand { font-size: 15px; font-weight: 720; letter-spacing: -.025em; }
+    .caption { margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .route {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px 0 24px;
+      padding: 15px 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 5px 14px 14px 14px;
+      background: var(--white);
     }
-
-    .title .highlight {
-      color: #155DFC;
+    .route::before {
+      position: absolute;
+      z-index: 0;
+      top: 50%;
+      right: 25px;
+      left: 45px;
+      height: 1px;
+      background: var(--line);
+      content: "";
     }
-
-    .subtitle {
-      font-size: 13px;
-      color: #666;
-      text-align: center;
+    .route-node, .route-target { position: relative; z-index: 1; background: var(--white); }
+    .route-node { padding-right: 7px; }
+    .route-node strong { display: block; font-size: 12px; font-weight: 650; }
+    .route-node small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .route-target {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      margin-left: auto;
+      place-items: center;
+      border: 1px solid #d7e5dc;
+      border-radius: 50%;
+      color: var(--green);
+      font-size: 15px;
+    }
+    .section-heading { margin: 0 0 6px; font-size: 18px; font-weight: 720; letter-spacing: -.035em; }
+    .description { margin: 0 0 18px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .field-label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 650; }
+    .proxy-input.input {
+      display: block;
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid #bdcbc2;
+      border-radius: 7px;
+      outline: none;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .proxy-input.input:focus { border-color: var(--green); box-shadow: 0 0 0 3px #176b4b20; }
+    .proxy-input::placeholder { color: #96a29b; }
+    .hint { margin: 7px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .save-button.btn {
+      width: 100%;
+      min-height: 40px;
+      margin-top: 14px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--green);
+      color: var(--white);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: background .15s, transform .15s;
+    }
+    .save-button.btn:hover { background: var(--green-dark); }
+    .save-button.btn:active { transform: translateY(1px); }
+    .save-button.btn:disabled { opacity: .6; cursor: wait; }
+    .saved {
+      margin-top: 19px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .saved-label { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; }
+    .saved-label::before { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); content: ""; }
+    .saved-url {
+      display: block;
+      margin-top: 7px;
+      overflow-wrap: anywhere;
+      color: var(--ink);
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 11px;
       line-height: 1.5;
     }
-
-    .content {
-      padding: 20px 24px;
-    }
-
-    .section {
-      margin-bottom: 20px;
-    }
-
-    .section-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .node-selector {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px 12px;
-      min-width: 0;
-    }
-
-    .node-select {
-      flex: 1;
-      min-width: 0;
-      border: none;
-      background: transparent;
-      font-size: 13px;
-      color: #333;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right center;
-      padding-right: 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .latency-badge {
-      background: #ffebee;
-      color: #c62828;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-      flex-shrink: 0;
-      max-width: 80px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .latency-badge.good {
-      background: #e8f5e9;
-      color: #2e7d32;
-    }
-
-    .latency-badge.default {
-      background: #fff3e0;
-      color: #ef6c00;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .btn-primary {
-      background: #155DFC;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #0d4bb5;
-    }
-
-    .btn-secondary {
-      background: #f0f0f0;
-      color: #333;
-      border: 1px solid #ddd;
-    }
-
-    .btn-secondary:hover {
-      background: #e0e0e0;
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .info-card {
-      background: #f8f9fa;
-      border: 1px solid #eaeaea;
-      border-radius: 8px;
-      padding: 14px;
-      margin-top: 16px;
-    }
-
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-      font-size: 13px;
-    }
-
-    .info-row:not(:last-child) {
-      border-bottom: 1px solid #eee;
-    }
-
-    .info-label {
-      color: #666;
-    }
-
-    .info-value {
-      color: #333;
-      font-weight: 500;
-      max-width: 200px;
-      text-align: right;
-      word-break: break-all;
-    }
-
-    .notice {
-      background: #fff8e1;
-      border-left: 4px solid #ffc107;
-      padding: 12px 14px;
-      margin-top: 16px;
-      border-radius: 4px;
-      font-size: 12px;
-      color: #666;
-      line-height: 1.6;
-    }
-
-    .notice-icon {
-      display: inline-block;
-      margin-right: 4px;
-    }
-
-    .ghx-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 1em;
-      height: 1em;
-      line-height: 0;
-      vertical-align: -0.125em;
-      flex: 0 0 auto;
-    }
-
-    .ghx-icon svg {
-      width: 1em;
-      height: 1em;
-      display: block;
-    }
-
-    .footer {
-      padding: 16px 24px;
-      text-align: center;
-      font-size: 11px;
-      color: #999;
-      border-top: 1px solid #eaeaea;
-    }
-
-    .loading-spinner {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid #f3f3f3;
-      border-top: 2px solid #155DFC;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-    #announcement-host {
-      padding: 14px 16px 0;
-    }
+    .saved-url.empty { color: #87948c; font-family: inherit; }
+    .message { min-height: 16px; margin: 10px 0 0; color: var(--green); font-size: 11px; }
+    .message[data-kind="error"] { color: var(--error); }
+    .message:empty { display: none; }
+    :focus-visible { outline: 3px solid #176b4b55; outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
   </style>
 </head>
-
 <body>
-  <div class="header">
-    <div class="title">
-      <span class="normal">Github</span> <span class="highlight">Accelerator</span>
-    </div>
-    <div class="subtitle">智能 GitHub 下载加速器 · 加速链接模式</div>
-  </div>
-
-  <!-- 公告挂载点：由 ../shared/announcement.js 填充，无有效公告时保持隐藏 -->
-  <div id="announcement-host"></div>
-
-  <div class="content">
-    <div class="section">
-      <div class="section-label">
-        <span class="ghx-icon" data-icon="location"></span> 节点选择：
+  <main class="popup">
+    <header class="masthead">
+      <div class="mark" aria-hidden="true">↗</div>
+      <div>
+        <div class="brand">GitHub 加速</div>
+        <div class="caption">让下载经过你指定的代理</div>
       </div>
-      <div class="node-selector">
-        <select id="node-select" class="node-select">
-          <option value="">加载中...</option>
-        </select>
-        <span id="latency-badge" class="latency-badge default">-</span>
-      </div>
+    </header>
 
-      <div class="button-group">
-        <button id="speedtest-btn" class="btn btn-primary">
-          <span class="ghx-icon" data-icon="zap"></span> 节点测速
-        </button>
-        <button id="copy-btn" class="btn btn-secondary">
-          <span class="ghx-icon" data-icon="copy"></span> 复制地址
-        </button>
-        <button id="refresh-location-btn" class="btn btn-secondary" title="重新测试IP地址">
-          <span class="ghx-icon" data-icon="globe"></span> 重测IP
-        </button>
-      </div>
+    <div class="route" aria-label="GitHub 链接将经过自定义代理">
+      <div class="route-node"><strong>github.com</strong><small>下载与 Raw 文件</small></div>
+      <div class="route-target" aria-hidden="true">↗</div>
     </div>
 
-    <div class="section">
-      <div class="section-label">
-        <span class="ghx-icon" data-icon="edit"></span> 自定义节点（永久存储，默认置顶）：
-      </div>
-      <div class="custom-node-input" style="display: flex; gap: 8px;">
-        <input type="text" id="custom-node-url" placeholder="输入自定义节点URL（如 https://gh.example.com）"
-          style="flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px;" />
-        <button id="add-custom-node-btn" class="btn btn-primary" style="flex: 0 0 auto; padding: 8px 16px;">
-          <span class="ghx-icon" data-icon="add"></span> 添加
-        </button>
-      </div>
-      <div id="custom-nodes-list" style="margin-top: 12px;"></div>
-    </div>
+    <section aria-labelledby="settings-title">
+      <h1 class="section-heading" id="settings-title">代理地址</h1>
+      <p class="description">设置固定代理后，GitHub 下载链接会使用这个地址。</p>
+      <form id="proxy-form" novalidate>
+        <label class="field-label" for="proxy-url">代理服务 URL</label>
+        <input class="proxy-input input input-bordered" id="proxy-url" name="proxyUrl" type="url"
+          placeholder="https://proxy.example.com" autocomplete="url" spellcheck="false">
+        <p class="hint">支持 HTTP 或 HTTPS，可包含服务路径（如 /github）；地址不能带查询参数或片段。</p>
+        <button class="save-button btn btn-primary" id="save-button" type="submit">保存地址</button>
+      </form>
+      <p class="message" id="message" role="status" aria-live="polite"></p>
+    </section>
 
-    <div class="info-card">
-      <div class="info-row">
-        <span class="info-label"><span class="ghx-icon" data-icon="globe"></span> 地理位置</span>
-        <span id="location-info" class="info-value">检测中...</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">当前节点</span>
-        <span id="node-url" class="info-value">-</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">响应延迟</span>
-        <span id="node-latency" class="info-value">-</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">缓存剩余</span>
-        <span id="cache-ttl" class="info-value">-</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">状态</span>
-        <span id="status-text" class="info-value">检测中</span>
-      </div>
-    </div>
-
-    <div class="section" style="margin-top: 20px;">
-      <div class="section-label">
-        <span class="ghx-icon" data-icon="settings"></span> 加速设置：
-      </div>
-      <div class="option-item" style="display: flex; align-items: center; gap: 8px; padding: 8px 0;">
-        <input type="checkbox" id="always-accelerate-checkbox" style="width: 18px; height: 18px; cursor: pointer;" />
-        <label for="always-accelerate-checkbox" style="cursor: pointer; flex: 1; font-size: 13px; color: #333;">
-          <strong>始终使用加速链接</strong>
-        </label>
-      </div>
-      <div style="font-size: 11px; color: #666; margin-left: 26px; margin-top: 4px;">
-        启用后，访问 GitHub 下载链接将自动跳转，不再显示选择页面
-      </div>
-    </div>
-
-    <div class="notice">
-      <span class="ghx-icon notice-icon" data-icon="tip"></span>
-      公益服务，请勿滥用。自动选择最优代理节点加速 GitHub 资源下载。
-      <br>
-      支持 Releases、Archive、Raw、Code Download 等所有下载场景。
-    </div>
-  </div>
-
-  <div class="footer">
-    智能域名转换 + 节点加速 · Powered By <a style="color: #0d4bb5;text-decoration: none;" href="https://www.hubp.org"
-      target="_blank">hubp.org</a> · <a id="privacy-link" style="color: #0d4bb5;text-decoration: none;"
-      href="#">隐私政策</a> · <a id="stats-link" style="color: #0d4bb5;text-decoration: none;" href="#">统计</a>
-  </div>
-
+    <section class="saved" aria-label="当前保存的代理地址">
+      <div class="saved-label">当前已保存</div>
+      <output class="saved-url empty" id="saved-url">尚未设置代理地址</output>
+    </section>
+  </main>
   <script src="../lib/browser-polyfill.js"></script>
-  <script src="../lib/icons.js"></script>
-  <script src="../shared/announcement.js"></script>
-  <script src="popup.js"></script>
+  <script type="module" src="popup.js"></script>
 </body>
-
 </html>
